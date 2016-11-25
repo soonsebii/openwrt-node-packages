@@ -10,14 +10,14 @@ include $(TOPDIR)/rules.mk
 PKG_NPM_NAME:=firmata
 PKG_NAME:=node-$(PKG_NPM_NAME)
 PKG_VERSION:=0.14.1
-PKG_RELEASE:=3
+PKG_RELEASE:=9
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://registry.npmjs.org/$(PKG_NPM_NAME)/-/
 PKG_MD5SUM:=f566a87b9af4c12a87c387a26411f799
 
 PKG_BUILD_DEPENDS:=node/host
-PKG_NODE_VERSION:=6.5.0
+PKG_NODE_VERSION:=6.9.1
 PKG_USE_MIPS16:=0
 
 PKG_MAINTAINER:=
@@ -56,12 +56,14 @@ define Build/Compile
 	npm_config_nodedir=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/ \
 	npm_config_cache=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/npm-cache \
 	PREFIX="$(PKG_INSTALL_DIR)/usr/" \
-	$(STAGING_DIR)/host/bin/npm install --build-from-source --target_arch=$(CPU) -g $(PKG_BUILD_DIR)
+	npm install --build-from-source --target_arch=$(CPU) -g $(PKG_BUILD_DIR)
 endef
 
 define Package/node-firmata/install
 	mkdir -p $(1)/usr/lib/node
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/node_modules/* $(1)/usr/lib/node/
+	mkdir -p $(1)/usr/bin
+	$(LN) ../lib/node/firmata/repl.js $(1)/usr/bin/firmata
 endef
 
 $(eval $(call BuildPackage,node-firmata))

@@ -9,15 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=noble
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=1.6.0
+PKG_VERSION:=1.7.0
 PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_MD5SUM:=e3e98c228d72a214c374f27812cae3f8
+PKG_MD5SUM:=e019db623b23d33dedab45dde6283bbc
 
 PKG_BUILD_DEPENDS:=node/host
-PKG_NODE_VERSION:=6.5.0
+PKG_NODE_VERSION:=6.9.1
 PKG_USE_MIPS16:=0
 
 PKG_MAINTAINER:=
@@ -56,7 +56,7 @@ define Build/Compile
 	npm_config_nodedir=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/ \
 	npm_config_cache=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/npm-cache \
 	PREFIX="$(PKG_INSTALL_DIR)/usr/" \
-	$(STAGING_DIR)/host/bin/npm install --no-optional --build-from-source --target_arch=$(CPU) -g $(PKG_BUILD_DIR)
+	npm install --no-optional --build-from-source --target_arch=$(CPU) -g $(PKG_BUILD_DIR)
 endef
 
 define Package/node-noble/install

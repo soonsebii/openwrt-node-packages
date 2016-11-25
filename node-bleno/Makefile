@@ -9,15 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=bleno
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=0.4.0
-PKG_RELEASE:=9
+PKG_VERSION:=0.4.1
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_MD5SUM:=b739e816a745b415311f91edf7ac58e7
+PKG_MD5SUM:=d7388e7e14dd43e526bde3fec3d4f130
 
 PKG_BUILD_DEPENDS:=node/host
-PKG_NODE_VERSION:=6.5.0
+PKG_NODE_VERSION:=6.9.1
 PKG_USE_MIPS16:=0
 
 PKG_MAINTAINER:=
@@ -56,7 +56,7 @@ define Build/Compile
 	npm_config_nodedir=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/ \
 	npm_config_cache=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/npm-cache \
 	PREFIX="$(PKG_INSTALL_DIR)/usr/" \
-	$(STAGING_DIR)/host/bin/npm install --no-optional --build-from-source --target_arch=$(CPU) -g $(PKG_BUILD_DIR)
+	npm install --no-optional --build-from-source --target_arch=$(CPU) -g $(PKG_BUILD_DIR)
 endef
 
 define Package/node-bleno/install

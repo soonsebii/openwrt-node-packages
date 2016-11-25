@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016 LEDE project
+# Copyright (C) 2016 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,14 +7,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NPM_NAME:=i2c-bus
+PKG_NPM_NAME:=usb
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=1.1.1
-PKG_RELEASE:=8
+PKG_VERSION:=1.2.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_MD5SUM:=7e0dbdfb79639ba98b9dcd078b11b862
+PKG_MD5SUM:=c7dcd4df7ac836b65a2bb1d82f8d2ad4
 
 PKG_BUILD_DEPENDS:=node/host
 PKG_NODE_VERSION:=6.9.1
@@ -26,25 +26,22 @@ PKG_LICENSE_FILES:=LICENSE
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/node-i2c-bus
-  DEPENDS:=+node
+define Package/node-usb
+  DEPENDS:=+node +eudev +libusb-1.0
   SUBMENU:=Node.js
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=I2C serial bus access with JavaScript
-  URL:=https://www.npmjs.org/package/i2c-bus
+  TITLE:=Library to access USB devices
+  URL:=https://www.npmjs.com/package/usb
 endef
 
-define Package/node-i2c-bus/description
- I2C serial bus access with Node.js on Linux boards like the Raspberry Pi Zero, 1, 2, or 3, BeagleBone, BeagleBone Black, or Intel Edison. All methods have asynchronous and synchronous forms
+define Package/node-usb/description
+ Node.JS library for communicating with USB devices in JavaScript / CoffeeScript
 endef
 
 define Build/Prepare
 	/bin/tar xzf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR) --strip-components 1
 	$(Build/Patch)
-endef
-
-define Build/Configure
 endef
 
 CPU:=$(subst powerpc,ppc,$(subst aarch64,arm64,$(subst x86_64,x64,$(subst i386,ia32,$(ARCH)))))
@@ -59,10 +56,10 @@ define Build/Compile
 	npm install --build-from-source --target_arch=$(CPU) -g $(PKG_BUILD_DIR)
 endef
 
-define Package/node-i2c-bus/install
+define Package/node-usb/install
 	mkdir -p $(1)/usr/lib/node
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/node_modules/* $(1)/usr/lib/node/
 endef
 
-$(eval $(call BuildPackage,node-i2c-bus))
+$(eval $(call BuildPackage,node-usb))
 
